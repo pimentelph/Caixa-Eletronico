@@ -20,5 +20,5 @@ Este projeto simula um sistema de caixa eletrônico em C que gerencia e registra
 
 ## Itens bônus
 
-- [x]O sistema é projetado para lidar com uma escassez de notas e ajustar a quantidade distribuída com base na disponibilidade.
+- [x] O sistema é projetado para lidar com uma escassez de notas e ajustar a quantidade distribuída com base na disponibilidade.
 - [x] O registro de transações armazena até 100 operações.
