@@ -21,12 +21,13 @@ typedef struct Caixa{
 } Caixa;
 
 
-void darNotas(int valor, Caixa *caixa){
+void darNotas(long int valor, Caixa *caixa){
     
     time_t mytime;
     mytime = time(NULL);
     struct tm tm = *localtime(&mytime);
     
+    int valorTotalCaixa = 0;
     int transacaoIndex = caixa -> totalTransacoes;
     
     caixa -> transacoes[transacaoIndex].dia = tm.tm_mday;
@@ -36,6 +37,15 @@ void darNotas(int valor, Caixa *caixa){
     caixa -> transacoes[transacaoIndex].min = tm.tm_min;
     caixa -> transacoes[transacaoIndex].seg = tm.tm_sec;
     
+    for (int i = 0; i < 6; i++) {
+        valorTotalCaixa += caixa -> quantidadeNotas[i].valor * caixa -> quantidadeNotas[i].quantidade;
+    }
+    
+    if(valor > valorTotalCaixa){
+        printf("Este caixa nao tem cedulas suficientes para realizar o seu saque, procure outro caixa disponivel.\n\n");
+        printf("$== Obrigado pela preferencia e confiança na Think ATM! ==$");
+        exit(1);
+    }
     
     for (int i = 0; i < 6; i++) {
         if(valor >= caixa -> quantidadeNotas[i].valor && caixa -> quantidadeNotas[i].quantidade > 0){
@@ -91,7 +101,7 @@ int main()
     
     
     
-    darNotas(504, &caixa);
+    darNotas(1346, &caixa);
 
     
     LogTransacao transacao = caixa.transacoes[0];
@@ -99,7 +109,8 @@ int main()
     printf("Transação em %02d/%02d/%04d %02d:%02d:%02d\n",
            transacao.dia, transacao.mes, transacao.ano,
            transacao.hora, transacao.min, transacao.seg);
-           
+
+
     for (int i = 0; i < 6; i++) {
         if (transacao.quantidadeNotasDadas[i].quantidade > 0) {
             printf("Nota usada: %s - Valor: %d, Quantidade: %d\n",
@@ -107,6 +118,15 @@ int main()
                    transacao.quantidadeNotasDadas[i].valor,
                    transacao.quantidadeNotasDadas[i].quantidade);
         }
+    }
+    
+    printf("\n\n");
+    
+    for (int i = 0; i < 6; i++) {
+        printf("%s - Valor: %d, Quantidade: %d\n", 
+            caixa.quantidadeNotas[i].nome, 
+            caixa.quantidadeNotas[i].valor, 
+            caixa.quantidadeNotas[i].quantidade);
     }
 
     return 0;
